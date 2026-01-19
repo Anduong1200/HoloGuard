@@ -1,652 +1,178 @@
 {
-    "meta": {
-        "exporter": "ida-json-exporter",
-        "exporter_version": "1.0.0",
-        "ida_version": "8.3",
-        "timestamp": "2026-01-19T05:42:00Z",
-        "idb_name": "malware_sample.idb",
-        "idb_sha256": "d2f3a7c1b9e84f5d6c3e2a1b0f8e7d6c5b4a3928c7d6e5f4a3b2c1d0e9f8a7c1",
-        "notes": "Sample export demonstrating schema structure"
+  "meta": {
+    "exporter": "ida-json-exporter",
+    "exporter_version": "1.1.0",
+    "ida_version": "8.3",
+    "timestamp": "2026-01-19T12:00:00Z",
+    "idb_name": "malware_sample_hash_1.idb",
+    "idb_sha256": "abc1234567890abcdef1234567890abc",
+    "notes": "Synthetic sample for GNN Graph Construction reference"
+  },
+  "functions": [
+    {
+      "name": "sub_401000",
+      "start": "0x401000",
+      "end": "0x401040",
+      "size": 64,
+      "blocks": [
+        {
+          "id": "401000_bb0",
+          "start": "0x401000",
+          "end": "0x401015",
+          "insns": [
+            {
+              "mnemonic": "push",
+              "operands": [
+                "ebp"
+              ],
+              "bytes": "55"
+            },
+            {
+              "mnemonic": "mov",
+              "operands": [
+                "ebp",
+                "esp"
+              ],
+              "bytes": "89E5"
+            },
+            {
+              "mnemonic": "sub",
+              "operands": [
+                "esp",
+                "0x10"
+              ],
+              "bytes": "83EC10"
+            },
+            {
+              "mnemonic": "mov",
+              "operands": [
+                "eax",
+                "[ebp+8]"
+              ],
+              "bytes": "8B4508"
+            },
+            {
+              "mnemonic": "test",
+              "operands": [
+                "eax",
+                "eax"
+              ],
+              "bytes": "85C0"
+            },
+            {
+              "mnemonic": "jz",
+              "operands": [
+                "loc_401020"
+              ],
+              "bytes": "7409"
+            }
+          ],
+          "succs": [
+            "401000_bb1",
+            "401000_bb2"
+          ]
+        },
+        {
+          "id": "401000_bb1",
+          "start": "0x401015",
+          "end": "0x401020",
+          "insns": [
+            {
+              "mnemonic": "push",
+              "operands": [
+                "1"
+              ],
+              "bytes": "6A01"
+            },
+            {
+              "mnemonic": "call",
+              "operands": [
+                "sub_402000"
+              ],
+              "bytes": "E8..."
+            },
+            {
+              "mnemonic": "add",
+              "operands": [
+                "esp",
+                "4"
+              ],
+              "bytes": "83C404"
+            }
+          ],
+          "succs": [
+            "401000_bb3"
+          ]
+        },
+        {
+          "id": "401000_bb2",
+          "start": "0x401020",
+          "end": "0x401030",
+          "insns": [
+            {
+              "mnemonic": "xor",
+              "operands": [
+                "eax",
+                "eax"
+              ],
+              "bytes": "31C0"
+            },
+            {
+              "mnemonic": "lea",
+              "operands": [
+                "eax",
+                "[ebp-4]"
+              ],
+              "bytes": "8D45FC"
+            }
+          ],
+          "succs": [
+            "401000_bb3"
+          ]
+        },
+        {
+          "id": "401000_bb3",
+          "start": "0x401030",
+          "end": "0x401040",
+          "insns": [
+            {
+              "mnemonic": "pop",
+              "operands": [
+                "ebp"
+              ],
+              "bytes": "5D"
+            },
+            {
+              "mnemonic": "ret",
+              "operands": [],
+              "bytes": "C3"
+            }
+          ],
+          "succs": []
+        }
+      ]
+    }
+  ],
+  "cfg_edges": [
+    {
+      "from_block": "401000_bb0",
+      "to_block": "401000_bb1",
+      "type": "fall_through"
     },
-    "functions": [
-        {
-            "name": "sub_401000",
-            "start": "0x401000",
-            "end": "0x4010F0",
-            "size": 240,
-            "ordinal": 4198400,
-            "demangled": "",
-            "prototype": "int __cdecl sub_401000(char *buf, int size)",
-            "blocks": [
-                {
-                    "id": "401000_bb0",
-                    "start": "0x401000",
-                    "end": "0x401020",
-                    "insns": [
-                        {
-                            "ea": "0x401000",
-                            "mnemonic": "push",
-                            "operands": [
-                                "ebp"
-                            ],
-                            "bytes": "55",
-                            "xrefs_out": [],
-                            "comments": "Function prologue"
-                        },
-                        {
-                            "ea": "0x401001",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "ebp",
-                                "esp"
-                            ],
-                            "bytes": "89E5",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x401003",
-                            "mnemonic": "sub",
-                            "operands": [
-                                "esp",
-                                "0x20"
-                            ],
-                            "bytes": "83EC20",
-                            "xrefs_out": [],
-                            "comments": "Allocate local vars"
-                        },
-                        {
-                            "ea": "0x401006",
-                            "mnemonic": "push",
-                            "operands": [
-                                "esi"
-                            ],
-                            "bytes": "56",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x401007",
-                            "mnemonic": "push",
-                            "operands": [
-                                "edi"
-                            ],
-                            "bytes": "57",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x401008",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "eax",
-                                "[ebp+8]"
-                            ],
-                            "bytes": "8B4508",
-                            "xrefs_out": [],
-                            "comments": "Load buf argument"
-                        },
-                        {
-                            "ea": "0x40100B",
-                            "mnemonic": "test",
-                            "operands": [
-                                "eax",
-                                "eax"
-                            ],
-                            "bytes": "85C0",
-                            "xrefs_out": [],
-                            "comments": "NULL check"
-                        },
-                        {
-                            "ea": "0x40100D",
-                            "mnemonic": "jz",
-                            "operands": [
-                                "0x4010E0"
-                            ],
-                            "bytes": "0F84CD000000",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x40100D",
-                                    "to": "0x4010E0",
-                                    "type": "code_jump",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x40100D",
-                                    "is_flow": true
-                                }
-                            ],
-                            "comments": "Jump if buf is NULL"
-                        }
-                    ],
-                    "succs": [
-                        "401000_bb1",
-                        "401000_bb3"
-                    ],
-                    "preds": []
-                },
-                {
-                    "id": "401000_bb1",
-                    "start": "0x401013",
-                    "end": "0x401040",
-                    "insns": [
-                        {
-                            "ea": "0x401013",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "esi",
-                                "eax"
-                            ],
-                            "bytes": "89C6",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x401015",
-                            "mnemonic": "call",
-                            "operands": [
-                                "sub_402000"
-                            ],
-                            "bytes": "E8E60F0000",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x401015",
-                                    "to": "0x402000",
-                                    "type": "code_call",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x401015",
-                                    "is_flow": true
-                                }
-                            ],
-                            "comments": "Call helper function"
-                        },
-                        {
-                            "ea": "0x40101A",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "[ebp-4]",
-                                "eax"
-                            ],
-                            "bytes": "8945FC",
-                            "xrefs_out": [],
-                            "comments": "Store result"
-                        },
-                        {
-                            "ea": "0x40101D",
-                            "mnemonic": "cmp",
-                            "operands": [
-                                "eax",
-                                "0"
-                            ],
-                            "bytes": "83F800",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x401020",
-                            "mnemonic": "jl",
-                            "operands": [
-                                "0x4010D0"
-                            ],
-                            "bytes": "7CAE",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x401020",
-                                    "to": "0x4010D0",
-                                    "type": "code_jump",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x401020",
-                                    "is_flow": true
-                                }
-                            ],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [
-                        "401000_bb2",
-                        "401000_bb4"
-                    ],
-                    "preds": [
-                        "401000_bb0"
-                    ]
-                },
-                {
-                    "id": "401000_bb2",
-                    "start": "0x401022",
-                    "end": "0x401050",
-                    "insns": [
-                        {
-                            "ea": "0x401022",
-                            "mnemonic": "push",
-                            "operands": [
-                                "dword ptr [ebp+0Ch]"
-                            ],
-                            "bytes": "FF750C",
-                            "xrefs_out": [],
-                            "comments": "Push size argument"
-                        },
-                        {
-                            "ea": "0x401025",
-                            "mnemonic": "push",
-                            "operands": [
-                                "esi"
-                            ],
-                            "bytes": "56",
-                            "xrefs_out": [],
-                            "comments": "Push buf"
-                        },
-                        {
-                            "ea": "0x401026",
-                            "mnemonic": "call",
-                            "operands": [
-                                "memcpy"
-                            ],
-                            "bytes": "E8D5300000",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x401026",
-                                    "to": "0x404100",
-                                    "type": "code_call",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x401026",
-                                    "is_flow": true
-                                }
-                            ],
-                            "comments": "Copy buffer data"
-                        },
-                        {
-                            "ea": "0x40102B",
-                            "mnemonic": "add",
-                            "operands": [
-                                "esp",
-                                "8"
-                            ],
-                            "bytes": "83C408",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x40102E",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "eax",
-                                "[ebp-4]"
-                            ],
-                            "bytes": "8B45FC",
-                            "xrefs_out": [],
-                            "comments": "Return value"
-                        },
-                        {
-                            "ea": "0x401031",
-                            "mnemonic": "jmp",
-                            "operands": [
-                                "0x4010E5"
-                            ],
-                            "bytes": "EB__",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x401031",
-                                    "to": "0x4010E5",
-                                    "type": "code_jump",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x401031",
-                                    "is_flow": true
-                                }
-                            ],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [
-                        "401000_bb5"
-                    ],
-                    "preds": [
-                        "401000_bb1"
-                    ]
-                },
-                {
-                    "id": "401000_bb3",
-                    "start": "0x4010E0",
-                    "end": "0x4010E5",
-                    "insns": [
-                        {
-                            "ea": "0x4010E0",
-                            "mnemonic": "xor",
-                            "operands": [
-                                "eax",
-                                "eax"
-                            ],
-                            "bytes": "31C0",
-                            "xrefs_out": [],
-                            "comments": "Return 0 for NULL buf"
-                        },
-                        {
-                            "ea": "0x4010E2",
-                            "mnemonic": "jmp",
-                            "operands": [
-                                "0x4010E5"
-                            ],
-                            "bytes": "EB01",
-                            "xrefs_out": [],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [
-                        "401000_bb5"
-                    ],
-                    "preds": [
-                        "401000_bb0"
-                    ]
-                },
-                {
-                    "id": "401000_bb4",
-                    "start": "0x4010D0",
-                    "end": "0x4010E0",
-                    "insns": [
-                        {
-                            "ea": "0x4010D0",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "eax",
-                                "0xFFFFFFFF"
-                            ],
-                            "bytes": "B8FFFFFFFF",
-                            "xrefs_out": [],
-                            "comments": "Error: return -1"
-                        },
-                        {
-                            "ea": "0x4010D5",
-                            "mnemonic": "jmp",
-                            "operands": [
-                                "0x4010E5"
-                            ],
-                            "bytes": "EB0E",
-                            "xrefs_out": [],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [
-                        "401000_bb5"
-                    ],
-                    "preds": [
-                        "401000_bb1"
-                    ]
-                },
-                {
-                    "id": "401000_bb5",
-                    "start": "0x4010E5",
-                    "end": "0x4010F0",
-                    "insns": [
-                        {
-                            "ea": "0x4010E5",
-                            "mnemonic": "pop",
-                            "operands": [
-                                "edi"
-                            ],
-                            "bytes": "5F",
-                            "xrefs_out": [],
-                            "comments": "Function epilogue"
-                        },
-                        {
-                            "ea": "0x4010E6",
-                            "mnemonic": "pop",
-                            "operands": [
-                                "esi"
-                            ],
-                            "bytes": "5E",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x4010E7",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "esp",
-                                "ebp"
-                            ],
-                            "bytes": "89EC",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x4010E9",
-                            "mnemonic": "pop",
-                            "operands": [
-                                "ebp"
-                            ],
-                            "bytes": "5D",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x4010EA",
-                            "mnemonic": "ret",
-                            "operands": [],
-                            "bytes": "C3",
-                            "xrefs_out": [],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [],
-                    "preds": [
-                        "401000_bb2",
-                        "401000_bb3",
-                        "401000_bb4"
-                    ]
-                }
-            ],
-            "calls_out": [
-                "0x402000",
-                "0x404100"
-            ],
-            "called_by": [
-                "0x403000",
-                "0x403100"
-            ],
-            "function_xrefs": [
-                {
-                    "from": "0x401015",
-                    "to": "0x402000",
-                    "type": "code_call"
-                },
-                {
-                    "from": "0x401026",
-                    "to": "0x404100",
-                    "type": "code_call"
-                }
-            ]
-        },
-        {
-            "name": "sub_402000",
-            "start": "0x402000",
-            "end": "0x402050",
-            "size": 80,
-            "ordinal": 4202496,
-            "demangled": "",
-            "prototype": "int __cdecl sub_402000(void)",
-            "blocks": [
-                {
-                    "id": "402000_bb0",
-                    "start": "0x402000",
-                    "end": "0x402050",
-                    "insns": [
-                        {
-                            "ea": "0x402000",
-                            "mnemonic": "push",
-                            "operands": [
-                                "ebp"
-                            ],
-                            "bytes": "55",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x402001",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "ebp",
-                                "esp"
-                            ],
-                            "bytes": "89E5",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x402003",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "eax",
-                                "dword ptr [g_counter]"
-                            ],
-                            "bytes": "A100504000",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x402003",
-                                    "to": "0x405000",
-                                    "type": "data_read",
-                                    "operand_index": 1,
-                                    "insn_ea": "0x402003",
-                                    "is_flow": false
-                                }
-                            ],
-                            "comments": "Read global counter"
-                        },
-                        {
-                            "ea": "0x402008",
-                            "mnemonic": "inc",
-                            "operands": [
-                                "eax"
-                            ],
-                            "bytes": "40",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x402009",
-                            "mnemonic": "mov",
-                            "operands": [
-                                "dword ptr [g_counter]",
-                                "eax"
-                            ],
-                            "bytes": "A300504000",
-                            "xrefs_out": [
-                                {
-                                    "from": "0x402009",
-                                    "to": "0x405000",
-                                    "type": "data_write",
-                                    "operand_index": 0,
-                                    "insn_ea": "0x402009",
-                                    "is_flow": false
-                                }
-                            ],
-                            "comments": "Update global counter"
-                        },
-                        {
-                            "ea": "0x40200E",
-                            "mnemonic": "pop",
-                            "operands": [
-                                "ebp"
-                            ],
-                            "bytes": "5D",
-                            "xrefs_out": [],
-                            "comments": ""
-                        },
-                        {
-                            "ea": "0x40200F",
-                            "mnemonic": "ret",
-                            "operands": [],
-                            "bytes": "C3",
-                            "xrefs_out": [],
-                            "comments": ""
-                        }
-                    ],
-                    "succs": [],
-                    "preds": []
-                }
-            ],
-            "calls_out": [],
-            "called_by": [
-                "0x401015"
-            ],
-            "function_xrefs": []
-        }
-    ],
-    "xrefs": [
-        {
-            "from": "0x401015",
-            "to": "0x402000",
-            "type": "code_call",
-            "insn_ea": "0x401015",
-            "is_flow": true
-        },
-        {
-            "from": "0x401026",
-            "to": "0x404100",
-            "type": "code_call",
-            "insn_ea": "0x401026",
-            "is_flow": true
-        },
-        {
-            "from": "0x40100D",
-            "to": "0x4010E0",
-            "type": "code_jump",
-            "insn_ea": "0x40100D",
-            "is_flow": true
-        },
-        {
-            "from": "0x401020",
-            "to": "0x4010D0",
-            "type": "code_jump",
-            "insn_ea": "0x401020",
-            "is_flow": true
-        },
-        {
-            "from": "0x402003",
-            "to": "0x405000",
-            "type": "data_read",
-            "insn_ea": "0x402003",
-            "is_flow": false
-        },
-        {
-            "from": "0x402009",
-            "to": "0x405000",
-            "type": "data_write",
-            "insn_ea": "0x402009",
-            "is_flow": false
-        }
-    ],
-    "cfg_edges": [
-        {
-            "from_block": "401000_bb0",
-            "to_block": "401000_bb1",
-            "type": "fall_through"
-        },
-        {
-            "from_block": "401000_bb0",
-            "to_block": "401000_bb3",
-            "type": "branch"
-        },
-        {
-            "from_block": "401000_bb1",
-            "to_block": "401000_bb2",
-            "type": "fall_through"
-        },
-        {
-            "from_block": "401000_bb1",
-            "to_block": "401000_bb4",
-            "type": "branch"
-        },
-        {
-            "from_block": "401000_bb2",
-            "to_block": "401000_bb5",
-            "type": "branch"
-        },
-        {
-            "from_block": "401000_bb3",
-            "to_block": "401000_bb5",
-            "type": "branch"
-        },
-        {
-            "from_block": "401000_bb4",
-            "to_block": "401000_bb5",
-            "type": "branch"
-        }
-    ]
+    {
+      "from_block": "401000_bb0",
+      "to_block": "401000_bb2",
+      "type": "cond_jump"
+    },
+    {
+      "from_block": "401000_bb1",
+      "to_block": "401000_bb3",
+      "type": "fall_through"
+    },
+    {
+      "from_block": "401000_bb2",
+      "to_block": "401000_bb3",
+      "type": "fall_through"
+    }
+  ]
 }

@@ -67,32 +67,33 @@ def is_batch_mode():
     if not IDA_AVAILABLE:
         return False
     
-    # Method 1: Check idc.BATCH (most reliable for IDA 7.x+)
+    # Method 1: Check idc.BATCH (primary)
     try:
         if hasattr(idc, 'BATCH') and idc.BATCH:
             return True
     except:
         pass
+
+    # Method 2: Check idaapi.get_inf_structure().is_auto_enabled() (strict check)
+    try:
+        inf = idaapi.get_inf_structure()
+        if hasattr(inf, 'is_auto_enabled') and inf.is_auto_enabled():
+            return True
+    except:
+        pass
     
-    # Method 2: Check idc.ARGV (script arguments)
+    # Method 3: Check idc.ARGV
     try:
         if hasattr(idc, 'ARGV') and idc.ARGV:
             return True
     except:
         pass
     
-    # Method 3: Check environment variable
+    # Method 4: Environment variable
     if os.environ.get('IDA_BATCH_MODE', '').lower() in ('1', 'true', 'yes'):
         return True
     
-    # Method 4: Check if running under idat/idat64 (no GUI)
-    try:
-        if hasattr(idaapi, 'cvar') and hasattr(idaapi.cvar, 'batch'):
-            return bool(idaapi.cvar.batch)
-    except:
-        pass
-    
-    # Method 5: Check for -A flag indicator
+    # Method 5: Check kernel GUI
     try:
         import ida_kernwin
         if not ida_kernwin.is_ida_gui_present():

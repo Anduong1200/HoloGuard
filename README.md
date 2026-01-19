@@ -215,10 +215,63 @@ python json_to_pyg.py ./exports/ --output ./graphs/ --batch
 - Bag of Opcodes (95 common x86/x64 mnemonics)
 - Statistical features (block size, call count, xrefs)
 
-**Edges:**
-- CFG control flow from `cfg_edges`
+---
+
+## Graph Construction Deep Dive
+
+This pipeline implements a scientifically rigorous **Control Flow Graph (CFG)** extraction for GNNs.
+
+### 1. Data Structure (`sample_export.json`)
+The JSON structure maps directly to GNN components:
+
+```json
+{
+  "blocks": [
+    { "id": "bb0", "insns": [{"mnemonic": "push"}, {"mnemonic": "mov"}] },  // Node 0
+    { "id": "bb1", "insns": [{"mnemonic": "call"}] },                        // Node 1
+    { "id": "bb2", "insns": [{"mnemonic": "xor"}] }                          // Node 2
+  ],
+  "cfg_edges": [
+    { "from_block": "bb0", "to_block": "bb1" },  // Edge 0->1
+    { "from_block": "bb0", "to_block": "bb2" }   // Edge 0->2
+  ]
+}
+```
+
+### 2. Node Features (X)
+We use a **Bag-of-Opcodes** approach (10 dimensions) as specified for high-performance malware detection.
+Each basic block becomes a node feature vector counting opcode occurrences.
+
+**Strict Opcode Mapping (dim=10):**
+0: `mov` (Data)    | 1: `push` (Stack) | 2: `call` (Flow) | 3: `add` (Arith)
+4: `jmp` (Jump) | 5: `test` (Logic) | 6: `lea` (Addr)  | 7: `pop` (Stack)
+8: `ret` (Exit) | 9: `other` (Misc)
+
+**Example from Sample:**
+- **Node 0 (`bb0`)**: `push`, `mov`, `sub`, `mov`, `test`, `jz`
+  - Vector: `[2, 1, 0, 1, 1, 1, 0, 0, 0, 0]`
+  - (2 movs, 1 push, 1 sub->add, 1 test, 1 jz->jump)
+
+### 3. Edge Index (A)
+We map string IDs (`bb0`) to integer indices (`0`) to create the Sparse Edge Tensor (COO format).
+
+**Structure:**
+- `from_block` -> Source Node Index
+- `to_block`   -> Target Node Index
+
+**Resulting Tensor:**
+```python
+edge_index = tensor([
+    [0, 0, 1, 2],  # Source Nodes
+    [1, 2, 3, 3]   # Target Nodes
+])
+```
+
+### 4. Labels (y)
+Extracted from filename: `hash_1.json` -> `y = [1]` (Malware).
 
 ---
+
 
 ## License
 

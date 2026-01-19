@@ -26,6 +26,8 @@ env/
 *.ida_export.json
 *.ida_export.ndjson
 !sample_export.json
+exports/
+ida_exports/
 
 # Packages
 *.tar.gz
