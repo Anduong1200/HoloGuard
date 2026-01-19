@@ -41,7 +41,7 @@ except ImportError:
 class ExporterConfig:
     """Configuration options for the exporter."""
     EXPORTER_NAME = "ida-json-exporter"
-    EXPORTER_VERSION = "1.0.0"
+    EXPORTER_VERSION = "1.1.0"  # Updated for batch mode support
     
     # Output modes
     MODE_JSON = "json"       # Single JSON file
@@ -54,8 +54,75 @@ class ExporterConfig:
     # Feature toggles
     INCLUDE_BYTES = True          # Include instruction bytes
     INCLUDE_COMMENTS = True       # Include IDA comments
-    INCLUDE_GLOBAL_XREFS = True   # Build global xref list
+    INCLUDE_GLOBAL_XREFS = False  # Disabled for batch (saves time)
     INCLUDE_CFG_EDGES = True      # Include flattened CFG edges
+    
+    # Batch/Headless mode settings
+    OUTPUT_DIR = None             # Set via environment or argument
+    AUTO_EXIT = True              # Exit IDA after export in batch mode
+
+
+def is_batch_mode():
+    """Check if IDA is running in batch/headless mode."""
+    if not IDA_AVAILABLE:
+        return False
+    
+    # Method 1: Check idc.BATCH (most reliable for IDA 7.x+)
+    try:
+        if hasattr(idc, 'BATCH') and idc.BATCH:
+            return True
+    except:
+        pass
+    
+    # Method 2: Check idc.ARGV (script arguments)
+    try:
+        if hasattr(idc, 'ARGV') and idc.ARGV:
+            return True
+    except:
+        pass
+    
+    # Method 3: Check environment variable
+    if os.environ.get('IDA_BATCH_MODE', '').lower() in ('1', 'true', 'yes'):
+        return True
+    
+    # Method 4: Check if running under idat/idat64 (no GUI)
+    try:
+        if hasattr(idaapi, 'cvar') and hasattr(idaapi.cvar, 'batch'):
+            return bool(idaapi.cvar.batch)
+    except:
+        pass
+    
+    # Method 5: Check for -A flag indicator
+    try:
+        import ida_kernwin
+        if not ida_kernwin.is_ida_gui_present():
+            return True
+    except:
+        pass
+    
+    return False
+
+
+def get_output_path():
+    """Get output path from environment or generate default."""
+    # Check environment variable first (set by batch_runner.py)
+    env_path = os.environ.get('IDA_EXPORT_OUTPUT')
+    if env_path:
+        return env_path
+    
+    # Check for output directory
+    output_dir = os.environ.get('IDA_EXPORT_DIR', '')
+    
+    if IDA_AVAILABLE:
+        idb_name = idaapi.get_root_filename() or "unknown"
+        filename = f"{idb_name}.ida_export.json"
+        
+        if output_dir and os.path.isdir(output_dir):
+            return os.path.join(output_dir, filename)
+        else:
+            return os.path.join(os.path.expanduser("~"), filename)
+    
+    return "export.json"
 
 
 # === Utility Functions ===
@@ -721,16 +788,40 @@ def main():
         print("[*] Use: File -> Script file... or paste into IDA Python console")
         return None
     
+    batch = is_batch_mode()
+    
     print("=" * 60)
-    print("  IDA JSON Exporter v1.0")
+    print("  IDA JSON Exporter v1.1")
     print("  Exporting functions, xrefs, and CFG edges...")
+    if batch:
+        print("  [BATCH MODE DETECTED]")
     print("=" * 60)
     
-    # Default: use JSON mode
-    # For large databases, call export_ndjson() instead
-    return export_json()
+    # Get output path (from environment or default)
+    outpath = get_output_path()
+    
+    try:
+        # Default: use JSON mode
+        # For large databases, call export_ndjson() instead
+        result = export_json(outpath)
+        
+        if batch and ExporterConfig.AUTO_EXIT:
+            print("[*] Batch mode: Exiting IDA...")
+            time.sleep(1)  # Wait for file buffers to flush
+            idc.qexit(0)
+        
+        return result
+        
+    except Exception as e:
+        print(f"[!] Export failed: {e}")
+        if batch and ExporterConfig.AUTO_EXIT:
+            print("[*] Batch mode: Exiting IDA with error...")
+            time.sleep(1)
+            idc.qexit(1)
+        raise
 
 
 # Run if executed directly
 if __name__ == "__main__":
     main()
+

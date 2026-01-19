@@ -22,14 +22,19 @@ env/
 *.swo
 *~
 
-# IDA exports (keep sample, ignore real exports)
+# IDA exports (keep samples for dataset reference)
 *.ida_export.json
 *.ida_export.ndjson
 !sample_export.json
 
-# Packages (keep test for reference if needed)
+# Packages
 *.tar.gz
 !test_package.tar.gz
+
+# PyG graphs (generated, not tracked)
+*.pt
+pyg_graphs/
+graphs/
 
 # Signing keys (NEVER commit private keys)
 *_key.json

@@ -38,6 +38,18 @@ export_ndjson("my_large_sample.ndjson")
 | `ida_export_schema.json` | JSON Schema Draft-07 |
 | `sample_export.json` | Example output |
 
+### Dataset Reference
+
+The [`sample_export.json`](sample_export.json) file serves as a **template for your malware dataset**. It demonstrates:
+
+- **2 functions** with realistic x86 disassembly
+- **7 basic blocks** showing CFG structure
+- **26 instructions** with opcodes, operands, and bytes
+- **6 xrefs** (code calls, jumps, data reads/writes)
+- **7 CFG edges** for graph construction
+
+Use this as a reference when building your GNN training pipeline.
+
 ## Validation
 
 ```bash
@@ -162,6 +174,53 @@ for func in data["functions"]:
         G.add_edge(func["start"], target)
 ```
 
+---
+
+## GNN Pipeline (v1.1)
+
+### Batch Processing 10,000+ Samples
+
+```bash
+# Install dependencies
+pip install tqdm
+
+# Run batch processor
+python batch_runner.py \
+    --samples-dir ./malware \
+    --ida-path "C:/Program Files/IDA Pro 8.3/idat64.exe" \
+    --output-dir ./exports \
+    --workers 8
+```
+
+**Features:**
+- Parallel IDA instances (configurable workers)
+- Auto-skip processed samples
+- Progress bar (tqdm)
+- Error logging
+
+### Convert to PyTorch Geometric
+
+```bash
+# Install PyTorch Geometric
+pip install torch torch_geometric
+
+# Single file
+python json_to_pyg.py export.json --output graph.pt --info
+
+# Batch convert
+python json_to_pyg.py ./exports/ --output ./graphs/ --batch
+```
+
+**Node Features (Basic Blocks):**
+- Bag of Opcodes (95 common x86/x64 mnemonics)
+- Statistical features (block size, call count, xrefs)
+
+**Edges:**
+- CFG control flow from `cfg_edges`
+
+---
+
 ## License
 
 MIT
+
